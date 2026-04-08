@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>さくらマッチ｜あなたに合った作業所を探す</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700;900&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sakura: #f4a7b9;
+    --sakura-deep: #e07fa0;
+    --sakura-pale: #fdf0f4;
+    --sakura-light: #fce8ef;
+    --green: #5a9e84;
+    --green-light: #e8f5f0;
+    --charcoal: #2d2d35;
+    --mid: #6b6b7b;
+    --light: #f9f5f7;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(240,140,170,0.13);
+    --shadow-deep: 0 8px 40px rgba(240,140,170,0.22);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    background: var(--light);
+    color: var(--charcoal);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 背景装飾 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(244,167,185,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -150px; left: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(90,158,132,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ヘッダー */
+  header {
+    text-align: center;
+    padding: 48px 24px 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-petals {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+    animation: sway 3s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%,100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+  }
+  h1 span {
+    color: var(--sakura-deep);
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    color: var(--mid);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* メインカード */
+  .card {
+    max-width: 680px;
+    margin: 0 auto 40px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-inner {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 40px 36px;
+    box-shadow: var(--shadow-deep);
+    border: 1px solid rgba(244,167,185,0.15);
+  }
+
+  /* プログレスバー */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: var(--sakura-light);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sakura) 0%, var(--sakura-deep) 100%);
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ステップタイトル */
+  .step-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .step-desc {
+    color: var(--mid);
+    font-size: 0.9rem;
+    font-weight: 300;
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  /* 選択肢ボタン */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .option-btn {
+    background: var(--sakura-pale);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 16px 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.92rem;
+    color: var(--charcoal);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(244,167,185,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+  .option-btn:hover {
+    border-color: var(--sakura);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(244,167,185,0.25);
+  }
+  .option-btn:hover::before { opacity: 1; }
+  .option-btn.selected {
+    background: var(--sakura-light);
+    border-color: var(--sakura-deep);
+    box-shadow: 0 4px 16px rgba(224,127,160,0.3);
+  }
+  .option-btn .icon { font-size: 1.3rem; flex-shrink: 0; }
+  .option-btn .label { font-weight: 700; display: block; margin-bottom: 2px; }
+  .option-btn .hint { font-size: 0.78rem; color: var(--mid); font-weight: 300; }
+
+  /* テキスト入力 */
+  .text-input {
+    width: 100%;
+    border: 2px solid var(--sakura-light);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.95rem;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--sakura-pale);
+    margin-bottom: 8px;
+  }
+  .text-input:focus { border-color: var(--sakura-deep); }
+
+  /* ナビボタン */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    gap: 12px;
+  }
+  .btn-back {
+    background: none;
+    border: 2px solid var(--sakura-light);
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.92rem;
+    color: var(--mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: var(--sakura); color: var(--sakura-deep); }
+
+  .btn-next {
+    background: linear-gradient(135deg, var(--sakura) 0%, var(--sakura-deep) 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(224,127,160,0.35);
+    flex: 1;
+    max-width: 280px;
+  }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(224,127,160,0.45); }
+  .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* APIキー入力画面 */
+  .apikey-wrap {
+    background: var(--green-light);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(90,158,132,0.2);
+  }
+  .apikey-label {
+    font-size: 0.85rem;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .apikey-input {
+    width: 100%;
+    border: 2px solid rgba(90,158,132,0.3);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: monospace;
+    font-size: 0.88rem;
+    background: var(--white);
+    color: var(--charcoal);
+    outline: none;
+  }
+  .apikey-input:focus { border-color: var(--green); }
+  .apikey-note {
+    font-size: 0.78rem;
+    color: var(--mid);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* 結果画面 */
+  .result-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .result-header h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.3rem;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+  .result-header p {
+    font-size: 0.88rem;
+    color: var(--mid);
+    font-weight: 300;
+  }
+
+  .facility-card {
+    background: var(--sakura-pale);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(244,167,185,0.3);
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .facility-card:nth-child(2) { animation-delay: 0.1s; }
+  .facility-card:nth-child(3) { animation-delay: 0.2s; }
+
+  .facility-rank {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--sakura), var(--sakura-deep));
+    color: white;
+    border-radius: 99px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .facility-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+  }
+  .facility-location {
+    font-size: 0.83rem;
+    color: var(--mid);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .facility-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .tag {
+    background: rgba(244,167,185,0.2);
+    border: 1px solid rgba(244,167,185,0.4);
+    color: var(--sakura-deep);
+    border-radius: 99px;
+    padding: 3px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .tag.green {
+    background: rgba(90,158,132,0.1);
+    border-color: rgba(90,158,132,0.3);
+    color: var(--green);
+  }
+
+  .ai-intro {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.9rem;
+    color: var(--charcoal);
+    line-height: 1.8;
+    font-weight: 300;
+    border-left: 3px solid var(--sakura);
+    position: relative;
+  }
+  .ai-intro-label {
+    font-size: 0.75rem;
+    color: var(--sakura-deep);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ローディング */
+  .loading-wrap {
+    text-align: center;
+    padding: 48px 0;
+  }
+  .loading-petals {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .petal {
+    width: 12px; height: 12px;
+    background: var(--sakura);
+    border-radius: 50% 50% 50% 0;
+    animation: petalSpin 1.4s ease-in-out infinite;
+  }
+  .petal:nth-child(2) { animation-delay: 0.2s; background: var(--sakura-deep); }
+  .petal:nth-child(3) { animation-delay: 0.4s; background: var(--green); }
+  @keyframes petalSpin {
+    0%,80%,100% { transform: scale(0.6) rotate(45deg); opacity: 0.4; }
+    40% { transform: scale(1) rotate(45deg); opacity: 1; }
+  }
+  .loading-text {
+    color: var(--mid);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* エラー */
+  .error-box {
+    background: #fff5f5;
+    border: 1px solid #fca5a5;
+    border-radius: 12px;
+    padding: 16px;
+    color: #dc2626;
+    font-size: 0.88rem;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* リスタートボタン */
+  .btn-restart {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: none;
+    border: 2px solid var(--sakura-light);
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-size: 0.92rem;
+    color: var(--mid);
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+  }
+  .btn-restart:hover { border-color: var(--sakura); color: var(--sakura-deep); }
+
+  /* フッター */
+  footer {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--mid);
+    font-size: 0.8rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* レスポンシブ */
+  @media (max-width: 500px) {
+    .card-inner { padding: 28px 20px; }
+    .options-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-petals">🌸</div>
+  <h1>さくら<span>マッチ</span></h1>
+  <p class="subtitle">あなたにぴったりの就労継続支援A型事業所を見つけましょう</p>
+</header>
+
+<div class="card">
+  <div class="card-inner" id="app">
+    <!-- JSで描画 -->
+  </div>
+</div>
+
+<footer>
+  さくらマッチ — 札幌市 就労継続支援A型 マッチングサービス<br>
+  ※紹介内容はAIによる参考情報です。必ず直接事業所にお問い合わせください。
+</footer>
+
+<script>
+// ===== 設定 =====
+const GROQ_MODEL   = 'llama-3.3-70b-versatile';
+const GEMMA_MODEL  = 'gemma-3-27b-it';
+
+// ===== 事業所データベース =====
+const FACILITIES = [
+  {
+    id: 'nexuslink',
+    name: 'ネクサスリンク',
+    area: '東区',
+    access: '地下鉄東区役所前駅 直結',
+    tags: ['IT・Web', 'PC作業', 'デザイン', '駅直結', '200円ランチ'],
+    jobTypes: ['IT', 'web', 'デザイン', 'データ入力', 'ECサイト', 'マーケティング'],
+    disabilities: ['精神', '発達', '知的', '身体'],
+    features: ['駅近', '食事提供', 'PC未経験OK', 'スキルアップ'],
+    url: 'https://nexuslink.biz/',
+    detail: 'ECサイト運営・HTML/CSS・デザイン・データ入力・SNS運用など多彩なIT業務。PC未経験者でも段階的に習得可能。シェフ調理の200円ランチあり。'
+  },
+  {
+    id: 'challenged',
+    name: '札幌チャレンジド',
+    area: '（市内複数）',
+    access: '要問い合わせ',
+    tags: ['IT・Web', 'テレワーク可', '優良事業所認定', 'データ入力'],
+    jobTypes: ['IT', 'web', 'アノテーション', 'データ入力', '動画監視', 'アクセシビリティ'],
+    disabilities: ['精神', '発達', '知的', '身体'],
+    features: ['テレワーク可', '優良認定', '勤務時間調整可', '個別配慮'],
+    url: 'https://s-challenged.jp/',
+    detail: '全国協議会第1回優良A型事業所認定。通所困難な場合はテレワーク対応可能。平日10〜17時・個別調整あり。動画監視・Webアクセシビリティ検査・アノテーション等。'
+  },
+  {
+    id: 'almeria',
+    name: 'あるめりあ',
+    area: '中央区',
+    access: '地下鉄大通駅 徒歩5分',
+    tags: ['IT・Web', 'WEB制作', 'プログラミング', '中央区', '1日4時間〜'],
+    jobTypes: ['IT', 'web', 'プログラミング', 'データ入力', 'WEB制作'],
+    disabilities: ['精神', '発達', '知的', '身体'],
+    features: ['駅近', '短時間OK', '通院調整可', 'IT資格取得支援'],
+    url: 'https://almeria.jp/',
+    detail: 'WEB制作・プログラミング・データ入力等のIT業務。1日4時間から働けるため体への負担が少ない。通院日の調整もLINEで相談可。20〜50代の利用者が在籍。'
+  },
+  {
+    id: 'joblogic',
+    name: 'ジョブロジック',
+    area: '（市内複数）',
+    access: '要問い合わせ',
+    tags: ['軽作業', '施設外就労', '食品加工', '就職支援充実'],
+    jobTypes: ['軽作業', '清掃', '食品加工', '施設外就労'],
+    disabilities: ['精神', '発達', '知的', '身体'],
+    features: ['スタッフ同行', '就職支援', '生活リズム重視', '一般就労サポート'],
+    url: 'https://job-logic.net/',
+    detail: '食品工場等での施設外就労が中心。スタッフが現場に同行するため安心。医療機関・ハローワークと連携した就職支援あり。'
+  },
+  {
+    id: 'taskal',
+    name: 'タスカル',
+    area: '北区',
+    access: '地下鉄北18条駅 徒歩2分',
+    tags: ['軽作業', '事務作業', '北区', '駅近'],
+    jobTypes: ['軽作業', '事務', '清掃', '宛名書き', '施設外就労'],
+    disabilities: ['精神', '発達', '知的', '身体'],
+    features: ['駅近', '多様な業務', '施設外就労あり'],
+    url: 'https://taskal.me/',
+    detail: '宛名書き・香りサンプル制作・ホテル清掃など多様な業務。北18条駅から徒歩2分のアクセス良好な立地。'
+  }
+];
+
+// ===== ステップ定義 =====
+const STEPS = [
+  {
+    id: 'apikey',
+    title: 'AIのAPIキーを設定してください',
+    desc: 'GroqまたはGoogle AI Studio（Gemma）のAPIキーを入力してください。どちらか一方でもOKです。Groqが優先して使われます。',
+    type: 'apikey'
+  },
+  {
+    id: 'disability',
+    title: 'どのような障害をお持ちですか？',
+    desc: '当てはまるものを選んでください（複数選択可）',
+    type: 'multi',
+    options: [
+      { icon: '🧠', label: '精神障害', hint: 'うつ・統合失調症など', value: '精神' },
+      { icon: '🌀', label: '発達障害', hint: 'ASD・ADHDなど', value: '発達' },
+      { icon: '♿', label: '身体障害', hint: '手の震え・運動機能など', value: '身体' },
+      { icon: '📚', label: '知的障害', hint: '', value: '知的' },
+      { icon: '🤔', label: 'わからない', hint: '専門家に相談中', value: 'その他' }
+    ]
+  },
+  {
+    id: 'physical',
+    title: '身体的な配慮が必要なことはありますか？',
+    desc: '当てはまるものをすべて選んでください',
+    type: 'multi',
+    options: [
+      { icon: '🤲', label: '手の震え・ふるえ', hint: 'タイピング・細作業に影響', value: '手の震え' },
+      { icon: '🚶', label: '歩行・移動が大変', hint: '長距離歩行が難しい', value: '移動困難' },
+      { icon: '👁️', label: '視力・眼精疲労', hint: '画面を長時間見るのが難しい', value: '視力' },
+      { icon: '🔇', label: '聴覚への配慮', hint: '聞こえにくい・耳鳴りなど', value: '聴覚' },
+      { icon: '💤', label: '疲れやすい', hint: '体力・集中力が続きにくい', value: '疲れやすい' },
+      { icon: '✅', label: '特にない', hint: '', value: 'なし' }
+    ]
+  },
+  {
+    id: 'jobtype',
+    title: 'どんな仕事に興味がありますか？',
+    desc: '希望する仕事の種類を選んでください（複数選択可）',
+    type: 'multi',
+    options: [
+      { icon: '💻', label: 'IT・パソコン作業', hint: 'データ入力・Web関連', value: 'IT' },
+      { icon: '🎨', label: 'デザイン・クリエイティブ', hint: 'チラシ・画像編集など', value: 'デザイン' },
+      { icon: '🌐', label: 'Webサイト制作', hint: 'HTML・CSS・更新作業', value: 'web' },
+      { icon: '📦', label: '軽作業・梱包', hint: '手を使う細かい作業', value: '軽作業' },
+      { icon: '🧹', label: '清掃・施設管理', hint: 'ホテル・施設清掃など', value: '清掃' },
+      { icon: '📋', label: '事務・書類整理', hint: '文書作成・電話対応など', value: '事務' }
+    ]
+  },
+  {
+    id: 'area',
+    title: 'お住まいの区はどちらですか？',
+    desc: '通いやすい事業所を絞り込むために使います',
+    type: 'single',
+    options: [
+      { icon: '🏙️', label: '中央区', value: '中央区' },
+      { icon: '🌿', label: '北区', value: '北区' },
+      { icon: '🌊', label: '東区', value: '東区' },
+      { icon: '🏔️', label: '白石区', value: '白石区' },
+      { icon: '🌸', label: '豊平区', value: '豊平区' },
+      { icon: '🌲', label: '南区', value: '南区' },
+      { icon: '🏡', label: '西区', value: '西区' },
+      { icon: '🌾', label: '厚別区・清田区・手稲区', value: '郊外' }
+    ]
+  },
+  {
+    id: 'age',
+    title: '年齢はどのくらいですか？',
+    desc: '同世代の利用者がいる事業所をご紹介します',
+    type: 'single',
+    options: [
+      { icon: '🌱', label: '10〜20代', value: '20代以下' },
+      { icon: '🌿', label: '30代', value: '30代' },
+      { icon: '🌳', label: '40代', value: '40代' },
+      { icon: '🍁', label: '50代', value: '50代' },
+      { icon: '🌾', label: '60代以上', value: '60代以上' }
+    ]
+  },
+  {
+    id: 'telework',
+    title: '通所・テレワークについて',
+    desc: 'どちらの働き方をご希望ですか？',
+    type: 'single',
+    options: [
+      { icon: '🏢', label: '毎日通所したい', hint: '事業所に毎日通って働く', value: '通所' },
+      { icon: '🏠', label: 'テレワーク希望', hint: '在宅でできる業務がよい', value: 'テレワーク' },
+      { icon: '🔄', label: '併用したい', hint: '通所とテレワークを組み合わせ', value: '併用' },
+      { icon: '🤷', label: 'どちらでも', hint: '柔軟に対応したい', value: 'どちらでも' }
+    ]
+  }
+];
+
+// ===== 状態管理 =====
+let state = {
+  step: 0,
+  answers: {},
+  groqKey: '',
+  gemmaKey: '',
+  loading: false,
+  results: null,
+  error: ''
+};
+
+// ===== マッチングロジック =====
+function matchFacilities(answers) {
+  const scored = FACILITIES.map(f => {
+    let score = 0;
+    const jobTypes = answers.jobtype || [];
+    const disabilities = answers.disability || [];
+    const physical = answers.physical || [];
+    const telework = answers.telework || '';
+    const area = answers.area || '';
+
+    // 仕事タイプマッチ
+    jobTypes.forEach(j => {
+      if (f.jobTypes.some(jt => jt.includes(j) || j.includes(jt))) score += 3;
+    });
+
+    // 障害マッチ
+    disabilities.forEach(d => {
+      if (f.disabilities.includes(d)) score += 1;
+    });
+
+    // テレワーク
+    if ((telework === 'テレワーク' || telework === '併用') && f.features.includes('テレワーク可')) {
+      score += 3;
+    }
+
+    // 手の震えがある場合はPC主体を優先
+    if (physical.includes('手の震え')) {
+      if (f.jobTypes.some(j => ['IT','web','データ入力','アノテーション'].includes(j))) score += 2;
+    }
+
+    // エリア（同区＋隣接）
+    if (f.area.includes(area)) score += 2;
+    if (area === '中央区' && ['中央区','東区'].some(a => f.area.includes(a))) score += 1;
+
+    return { ...f, score };
+  });
+
+  return scored
+    .filter(f => f.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+}
+
+// ===== AI紹介文生成 =====
+function buildPrompt(facility, answers) {
+  const disability = (answers.disability || []).join('・') || '障害あり';
+  const physical = (answers.physical || []).filter(p => p !== 'なし').join('・') || 'なし';
+  const jobtype = (answers.jobtype || []).join('・') || '未定';
+  const age = answers.age || '不明';
+  const telework = answers.telework || '';
+
+  return `あなたは就労支援の専門家です。以下の利用者プロフィールと事業所情報をもとに、その人に向けた温かい紹介文を150文字程度で書いてください。
+
+【利用者プロフィール】
+- 障害種別: ${disability}
+- 身体的な配慮: ${physical}
+- 希望職種: ${jobtype}
+- 年代: ${age}
+- 働き方希望: ${telework}
+
+【事業所情報】
+- 名前: ${facility.name}
+- 場所: ${facility.area}（${facility.access}）
+- 業務内容: ${facility.detail}
+- 特徴: ${facility.features.join('・')}
+
+紹介文の条件:
+- この利用者のプロフィールに合わせて「なぜこの事業所が向いているか」を具体的に説明する
+- 身体的な配慮（特に${physical || 'なし'}）への対応についても触れる
+- 温かみのある丁寧な文章で書く
+- 150文字程度、です・ます調で`;
+}
+
+async function callGroq(prompt) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${state.groqKey}`
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || 'Groq API error');
+  }
+  const data = await res.json();
+  return data.choices[0].message.content.trim();
+}
+
+async function callGemma(prompt) {
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMMA_MODEL}:generateContent?key=${state.gemmaKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 300 }
+      })
+    }
+  );
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error?.message || 'Gemma API error');
+  }
+  const data = await res.json();
+  return data.candidates[0].content.parts[0].text.trim();
+}
+
+async function generateIntro(facility, answers) {
+  const prompt = buildPrompt(facility, answers);
+  // Groq優先、失敗したらGemmaにフォールバック
+  if (state.groqKey) {
+    try { return await callGroq(prompt); } catch (e) {
+      console.warn('Groq failed, trying Gemma:', e.message);
+    }
+  }
+  if (state.gemmaKey) {
+    return await callGemma(prompt);
+  }
+  throw new Error('APIキーが設定されていません');
+}
+
+// ===== レンダリング =====
+function render() {
+  const app = document.getElementById('app');
+
+  if (state.loading) {
+    app.innerHTML = `
+      <div class="loading-wrap">
+        <div class="loading-petals">
+          <div class="petal"></div>
+          <div class="petal"></div>
+          <div class="petal"></div>
+        </div>
+        <p class="loading-text">AIがあなたにぴったりの事業所を<br>探しています…</p>
+      </div>`;
+    return;
+  }
+
+  if (state.results) {
+    renderResults(app);
+    return;
+  }
+
+  const totalSteps = STEPS.length;
+  const current = STEPS[state.step];
+  const progress = Math.round((state.step / totalSteps) * 100);
+
+  let html = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>ステップ ${state.step + 1} / ${totalSteps}</span>
+        <span>${progress}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+    </div>
+    <div class="step-title">${current.title}</div>
+    <div class="step-desc">${current.desc}</div>
+  `;
+
+  if (current.type === 'apikey') {
+    html += `
+      <div class="apikey-wrap">
+        <div class="apikey-label">⚡ Groq APIキー <span style="font-weight:300;font-size:0.8rem;">（優先・無料枠あり）</span></div>
+        <input type="password" class="apikey-input" id="groqKeyInput"
+          placeholder="gsk_..." value="${state.groqKey}"
+          oninput="state.groqKey = this.value; render();">
+      </div>
+      <div style="text-align:center;color:var(--mid);font-size:0.85rem;margin:8px 0;">または</div>
+      <div class="apikey-wrap">
+        <div class="apikey-label">🔷 Google AI Studio APIキー <span style="font-weight:300;font-size:0.8rem;">（Gemma・フォールバック）</span></div>
+        <input type="password" class="apikey-input" id="gemmaKeyInput"
+          placeholder="AIza..." value="${state.gemmaKey}"
+          oninput="state.gemmaKey = this.value; render();">
+      </div>
+      <div class="apikey-note" style="margin-top:4px;">※ どちらか一方でもOK。Groqが優先され、失敗時にGemmaを使用します。キーはブラウザのメモリのみに保持されます。</div>
+      <div class="error-box" id="errBox">${state.error}</div>
+    `;
+  } else if (current.type === 'single') {
+    const selected = state.answers[current.id] || '';
+    html += `<div class="options-grid">`;
+    current.options.forEach(opt => {
+      const sel = selected === opt.value ? 'selected' : '';
+      html += `
+        <button class="option-btn ${sel}" onclick="selectSingle('${current.id}','${opt.value}')">
+          <span class="icon">${opt.icon}</span>
+          <span>
+            <span class="label">${opt.label}</span>
+            ${opt.hint ? `<span class="hint">${opt.hint}</span>` : ''}
+          </span>
+        </button>`;
+    });
+    html += `</div>`;
+  } else if (current.type === 'multi') {
+    const selected = state.answers[current.id] || [];
+    html += `<div class="options-grid">`;
+    current.options.forEach(opt => {
+      const sel = selected.includes(opt.value) ? 'selected' : '';
+      html += `
+        <button class="option-btn ${sel}" onclick="toggleMulti('${current.id}','${opt.value}')">
+          <span class="icon">${opt.icon}</span>
+          <span>
+            <span class="label">${opt.label}</span>
+            ${opt.hint ? `<span class="hint">${opt.hint}</span>` : ''}
+          </span>
+        </button>`;
+    });
+    html += `</div>`;
+  }
+
+  const isFirst = state.step === 0;
+  const canNext = canProceed();
+
+  html += `
+    <div class="nav-row">
+      ${!isFirst ? `<button class="btn-back" onclick="prevStep()">← 戻る</button>` : '<div></div>'}
+      <button class="btn-next" onclick="nextStep()" ${canNext ? '' : 'disabled'}>
+        ${state.step === STEPS.length - 1 ? '🌸 マッチングする' : '次へ →'}
+      </button>
+    </div>`;
+
+  app.innerHTML = html;
+
+  // エラー表示
+  if (state.error && current.type === 'apikey') {
+    document.getElementById('errBox').style.display = 'block';
+  }
+}
+
+function renderResults(app) {
+  const facilities = state.results;
+  let html = `
+    <div class="result-header">
+      <h2>🌸 あなたへのおすすめ事業所</h2>
+      <p>回答内容をもとにAIが選びました</p>
+    </div>`;
+
+  const ranks = ['🥇 第1位', '🥈 第2位', '🥉 第3位'];
+
+  facilities.forEach((f, i) => {
+    html += `
+      <div class="facility-card">
+        <div class="facility-rank">${ranks[i] || `第${i+1}位`}</div>
+        <div class="facility-name">${f.name}</div>
+        <div class="facility-location">📍 ${f.area}｜${f.access}</div>
+        <div class="facility-tags">
+          ${f.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+          ${f.features.includes('テレワーク可') ? '<span class="tag green">🏠 テレワーク可</span>' : ''}
+        </div>
+        <div class="ai-intro">
+          <div class="ai-intro-label">✨ AIによる紹介（${state.groqKey ? 'Groq' : 'Gemma'}）</div>
+          ${f.intro ? f.intro : '<span style="color:#aaa">生成中…</span>'}
+        </div>
+        ${f.url ? `<a href="${f.url}" target="_blank" rel="noopener"
+          style="display:inline-block;margin-top:12px;font-size:0.82rem;color:var(--sakura-deep);text-decoration:none;font-weight:700;">
+          🌐 公式サイトを見る →</a>` : ''}
+      </div>`;
+  });
+
+  html += `
+    <button class="btn-restart" onclick="restart()">🔄 最初からやり直す</button>`;
+
+  app.innerHTML = html;
+}
+
+// ===== アクション =====
+function selectSingle(id, value) {
+  state.answers[id] = value;
+  render();
+}
+
+function toggleMulti(id, value) {
+  if (!state.answers[id]) state.answers[id] = [];
+  const arr = state.answers[id];
+  const idx = arr.indexOf(value);
+  if (idx >= 0) arr.splice(idx, 1);
+  else arr.push(value);
+  render();
+}
+
+function canProceed() {
+  const current = STEPS[state.step];
+  if (current.type === 'apikey') return state.groqKey.length > 10 || state.gemmaKey.length > 10;
+  if (current.type === 'single') return !!state.answers[current.id];
+  if (current.type === 'multi') return (state.answers[current.id] || []).length > 0;
+  return true;
+}
+
+function prevStep() {
+  if (state.step > 0) { state.step--; state.error = ''; render(); }
+}
+
+async function nextStep() {
+  if (!canProceed()) return;
+
+  if (state.step === STEPS.length - 1) {
+    // マッチング開始
+    state.loading = true;
+    state.error = '';
+    render();
+
+    try {
+      const matched = matchFacilities(state.answers);
+      if (matched.length === 0) {
+        state.loading = false;
+        state.error = 'マッチする事業所が見つかりませんでした。条件を変えてお試しください。';
+        state.step = 1;
+        render();
+        return;
+      }
+
+      // AI紹介文生成（並列）
+      const withIntros = await Promise.all(
+        matched.map(async f => {
+          try {
+            const intro = await generateIntro(f, state.answers);
+            return { ...f, intro };
+          } catch {
+            return { ...f, intro: f.detail };
+          }
+        })
+      );
+
+      state.loading = false;
+      state.results = withIntros;
+      render();
+    } catch (e) {
+      state.loading = false;
+      state.error = 'エラーが発生しました: ' + e.message;
+      state.step = 0;
+      render();
+    }
+    return;
+  }
+
+  state.step++;
+  render();
+}
+
+function restart() {
+  state = { step: 0, answers: {}, groqKey: state.groqKey, gemmaKey: state.gemmaKey, loading: false, results: null, error: '' };
+  render();
+}
+
+// ===== 起動 =====
+render();
+</script>
+</body>
+</html>
